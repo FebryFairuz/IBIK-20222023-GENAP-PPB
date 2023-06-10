@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+/PROJECT/material-teori-pbb/node_modules
 
 # testing
 /coverage
