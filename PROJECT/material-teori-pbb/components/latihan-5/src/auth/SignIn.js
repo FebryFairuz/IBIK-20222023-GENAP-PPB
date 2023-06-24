@@ -10,11 +10,16 @@ import React, { useState } from "react";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { openModal } from "../components/ModalPopUp";
 import ModalView from "../components/ModalPopUp";
+import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import { storedData } from "../helper/storageHelper";
 
-const SignIn = ({navigation}) => {
-  const [email, setMail] = useState("212310016@student.ibik.ac.id");
+const SignIn = () => {
+  const [hasLaunch, setHasLaunch] = useState(false);
+  const navigation = useNavigation();
+  const [email, setMail] = useState("212310020@student.ibik.ac.id");
   const [isValidMail, setValidMail] = useState("");
-  const [password, setPassword] = useState("BESTstudent_2023");
+  const [password, setPassword] = useState("123456");
   const [isValidPass, setValidPass] = useState("");
   const isValidEmail = (val) => {
     if (val.length > 3) {
@@ -30,15 +35,15 @@ const SignIn = ({navigation}) => {
   };
 
   const isValidPassword = (value) => {
-    if(value.length > 3){
-        setValidPass("");
-        setPassword(value);
-    }else{
-        setValidPass("This field is required");
+    if (value.length > 3) {
+      setValidPass("");
+      setPassword(value);
+    } else {
+      setValidPass("This field is required");
     }
-  }
+  };
   const [isOpenPass, setOpenPass] = useState(true);
-  const handlerOpenPassword = () =>{
+  const handlerOpenPassword = () => {
     switch (!isOpenPass) {
       case true:
         setOpenPass(true);
@@ -47,20 +52,46 @@ const SignIn = ({navigation}) => {
         setOpenPass(false);
         break;
     }
+  };
+
+  const handlerSignIn = () => {
+    if (email && password) {
+        var data = { email: email, password:password };
+        Post2API(data);
+    } else {
+      openModal({ message: "Please fill up the form with correctly" });
+    }
+  };
+
+  const Post2API = (values) => {
+    let data = JSON.stringify(values);
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "http://localhost:8000/api/sign-in",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        var value = response.data.data;
+        _storedData(JSON.stringify(value));
+        navigation.navigate("AppNavbarBottom");
+      })
+      .catch((error) => {
+        console.log("error",error);
+      });
+  };
+
+  const _storedData = async (value) =>{
+    await storedData('C_USER', value );
   }
 
-  const handlerSignIn = () =>{
-    if(email && password){
-        if(email === "212310016@student.ibik.ac.id" && password === "BESTstudent_2023"){
-            console.log("ok");
-            navigation.navigate("AppNavbarBottom");
-        }else{
-            openModal({message:"Email/Password is not match"});
-        }
-    }else{
-        openModal({message:"Please fill up the form with correctly"});
-    }
-  }
 
   return (
     <View style={styles.container}>
@@ -75,7 +106,7 @@ const SignIn = ({navigation}) => {
           defaultValue={email}
           onChangeText={(text) => isValidEmail(text)}
         />
-        <Text style={{ color:"red", fontSize:11 }}>{isValidMail}</Text>
+        <Text style={{ color: "red", fontSize: 11 }}>{isValidMail}</Text>
       </View>
 
       <View style={styles.frm_row}>
@@ -91,15 +122,24 @@ const SignIn = ({navigation}) => {
             secureTextEntry={isOpenPass}
             placeholder="Enter your password"
             autoCorrect={false}
-            style={{ ...styles.text_input, borderWidth:0, padding:0, width:"90%" }}
+            style={{
+              ...styles.text_input,
+              borderWidth: 0,
+              padding: 0,
+              width: "90%",
+            }}
             defaultValue={password}
-            onChangeText={(text)=>isValidPassword(text)}
+            onChangeText={(text) => isValidPassword(text)}
           />
-          <Pressable onPress={()=>handlerOpenPassword()}>
-            <FontAwesome5 name={(isOpenPass) ? "eye":"eye-slash"} size={25} color="purple" />
+          <Pressable onPress={() => handlerOpenPassword()}>
+            <FontAwesome5
+              name={isOpenPass ? "eye" : "eye-slash"}
+              size={25}
+              color="purple"
+            />
           </Pressable>
         </View>
-        <Text style={{ color:"red", fontSize:11 }}>{isValidPass}</Text>
+        <Text style={{ color: "red", fontSize: 11 }}>{isValidPass}</Text>
       </View>
 
       <TouchableOpacity
@@ -145,6 +185,6 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 10,
     borderRadius: 10,
-    marginTop:15
+    marginTop: 15,
   },
 });

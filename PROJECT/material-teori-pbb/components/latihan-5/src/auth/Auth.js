@@ -63,7 +63,7 @@ export class Auth extends Component {
             >
               <View style={{ flex: 1 }}></View>
               <View style={{ flex: 1, justifyContent: "flex-end" }}>
-                <SignIn navigation={this.props.navigation} />
+                <SignIn />
               </View>
             </ImageBackground>
             
