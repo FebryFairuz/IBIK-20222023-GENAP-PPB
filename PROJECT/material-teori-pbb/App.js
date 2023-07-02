@@ -1,11 +1,10 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import Auth from "./components/latihan-5/src/auth/Auth";
-import AppNavbarBottom from "./components/latihan-5/src/navigations/AppNavbarBottom";
-import DetailAttendance from "./components/latihan-5/src/modules/attendance/widgets/DetailAttendance";
-import AttendanceScreen from "./components/latihan-5/src/modules/attendance/Attendance";
+import Auth from "./components/latihan-8/auth/Auth";
+import MainRoutes from "./components/latihan-8/modules/MainRoutes";
+import QRScanner from "./components/latihan-8/modules/scanners/QRScanner";
+import Lunch from "./components/latihan-8/modules/explores/Lunch";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -14,6 +13,8 @@ export default function App() {
     <NavigationContainer>
       <StatusBar backgroundColor={"white"} barStyle="dark-content" />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="MainRoutes" component={MainRoutes} options={{ headerShown: false }} />
+        <Stack.Screen name="Lunch" component={Lunch} options={{ headerShown: true }}/>
         <Stack.Screen
           name="Auth"
           component={Auth}
@@ -23,52 +24,8 @@ export default function App() {
             headerBackTitle: "Back",
           }}
         />
-        <Stack.Screen name="AppNavbarBottom" component={AppNavbarBottom} options={{ gestureEnabled: false }} />
-
-        <Stack.Screen
-          name="AttendanceScreen"
-          component={AttendanceScreen}
-          options={{
-            headerTitle: "Attendance",
-            headerShown: true,
-            gestureEnabled: true,
-            headerBackTitle: "Back",
-          }}
-        />
-        <Stack.Screen
-          name="DetailAttendance"
-          component={DetailAttendance}
-          options={{
-            headerTitle: "Detail Attendance",
-            headerShown: true,
-            gestureEnabled: true,
-            headerBackTitle: "Back",
-          }}
-        />
-      </Stack.Navigator>
+        
+        </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-const Page1 = ({ navigation }) => {
-  return (
-    <SafeAreaView>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("MainApps", { name: "Febry" })}
-      >
-        <View
-          style={{
-            backgroundColor: "purple",
-            padding: 10,
-            borderRadius: 10,
-            margin: 10,
-          }}
-        >
-          <Text style={{ color: "white", textAlign: "center" }}>
-            Click here to see me
-          </Text>
-        </View>
-      </TouchableOpacity>
-    </SafeAreaView>
-  );
-};

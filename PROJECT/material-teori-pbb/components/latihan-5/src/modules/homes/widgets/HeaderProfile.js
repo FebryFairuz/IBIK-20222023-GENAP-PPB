@@ -4,16 +4,17 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { getStorageData } from "../../../helper/storageHelper";
 
 const HeaderProfile = () => {
+  
   const [profile, setProfile] = useState("");
   useEffect(()=>{
-    const getData = async () =>{
-      const data = await getStorageData("C_USER");
+    const get_data = async () =>{
+      const data = await getStorageData("C_user");
       if(data){
-        setProfile(JSON.parse(data));
+        setProfile( JSON.parse(data) );
       }
     }
 
-    getData().catch((error)=>{alert(error)});
+    get_data().catch(error => alert(error));
   },[])
 
   return (
@@ -21,8 +22,12 @@ const HeaderProfile = () => {
       <View style={{ flexDirection:"row" }}>
         <Image style={{ width:50, height:50, backgroundColor:"white", borderRadius:100 }} source={require("../../../../../../assets/icons/icon-boy-1.png")} />
         <View style={{ marginLeft:15, flexDirection:"column", justifyContent:"center", alignItems:"flex-start" }}>
-          <Text style={{ color:"white", fontSize:20, fontWeight:"bold" }}>{profile ? profile.name : "-"}</Text>
-          <Text style={{ color:"white", fontSize:16 }}>{profile ? profile.email : "-"}</Text>
+          <Text style={{ color:"white", fontSize:20, fontWeight:"bold" }}>
+            {profile.name}
+          </Text>
+          <Text style={{ color:"white", fontSize:16 }}>
+            {profile.email}
+          </Text>
         </View>
       </View>
       <View style={{ justifyContent:"center" }}>
