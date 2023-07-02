@@ -5,36 +5,35 @@ import MyInvoice from "../orders/MyInvoice";
 
 export default function QRScanner() {
   const [hasPermission, setHasPermission] = useState(null);
-  const [scanned, setScanned] = useState(true);
-  const objdata = {type:"invoice",body:"TNX065009"}
-  const [scannedData, setScannedData] = useState(objdata);
+  const [scanned, setScanned] = useState(false);
+  const [scannedData, setScannedData] = useState("");
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const { status } = await BarCodeScanner.requestPermissionsAsync();
-  //     setHasPermission(status === "granted");
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === "granted");
+    })();
+  }, []);
 
   const handleBarCodeScanned = ({ type, data }) => {
-    // console.log("Type",type);
-    // console.log("Data",data);
-    // setScanned(true);
-    // setScannedData(JSON.parse(data));
+    console.log("Type",type);
+    console.log("Data",data);
+    setScanned(true);
+    setScannedData(JSON.parse(data));
   };
 
   const handleScanAgain = () => {
-    // setScanned(false);
-    // setScannedData("");
+    setScanned(false);
+    setScannedData("");
   };
 
-  // if (hasPermission === null) {
-  //   return <Text>Requesting camera permission...</Text>;
-  // }
+  if (hasPermission === null) {
+    return <Text>Requesting camera permission...</Text>;
+  }
 
-  // if (hasPermission === false) {
-  //   return <Text>No access to camera</Text>;
-  // }
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
 
   return (
     <View style={styles.container}>
